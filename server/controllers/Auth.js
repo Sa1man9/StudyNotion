@@ -8,7 +8,7 @@ const {passwordUpdated}= require("../mail/templates/passwordUpdate")
 const Profile = require("../models/Profile")
 require("dotenv").config()
 
-// sendOTP
+
 exports.sendOTP= async (req,res) => {
 
     try{
@@ -22,8 +22,6 @@ exports.sendOTP= async (req,res) => {
                 message:"User already registered"
             })
         }
-
-        // generate otp
         var otp=otpGenerator.generate(6,{
             upperCaseAlphabets:false,
             lowerCaseAlphabets:false,
@@ -45,7 +43,6 @@ exports.sendOTP= async (req,res) => {
 
         const otpPayload = {email,otp};
 
-        // create entry in DB
         const otpBody = await OTP.create(otpPayload);
 
         console.log(otpBody);
@@ -66,7 +63,7 @@ exports.sendOTP= async (req,res) => {
     
 };
 
-// signUP
+
 exports.signUp = async (req,res)=>{
     try{
         const{
@@ -79,8 +76,6 @@ exports.signUp = async (req,res)=>{
             contactNumber,
             otp
         }=req.body;
-    
-        // validate
     
         if(!firstName || !lastName || !email || !password || !confirmPassword || !otp){
             return res.status(403).json({
@@ -105,7 +100,6 @@ exports.signUp = async (req,res)=>{
             })
         }
 
-        // recent otp
         const recentOtp= await OTP.find({email}).sort({createdAt:-1}).limit(1);
         console.log(recentOtp);
 
@@ -121,11 +115,9 @@ exports.signUp = async (req,res)=>{
             })
         }
 
-        // hash password
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // create entry in db 
         const profileDetails = await Profile.create({
             gender:null,
             dateOfBirth:null,
@@ -161,7 +153,6 @@ exports.signUp = async (req,res)=>{
   
 }
 
-// login
 
 exports.login = async (req,res)=>{
 
@@ -228,14 +219,9 @@ exports.login = async (req,res)=>{
     }
 }
 
-// change Password
 
 exports.changePassword = async (req,res, next) => {
 try {
-    
-
-    
-    // fetchData
 
     const userDetails = await User.findById(req.user.id);
 
@@ -266,7 +252,6 @@ try {
         })
     }
 
-    // Update password
 	const encryptedPassword = await bcrypt.hash(newPassword, 10);
 	const updatedUserDetails = await User.findByIdAndUpdate(
 		req.user.id,

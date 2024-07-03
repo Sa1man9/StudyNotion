@@ -60,6 +60,7 @@ exports.categoryPageDetails = async (req,res)=>{
     try {
         console.log("inside get category page details")
         const {categoryId}= req.body;
+        console.log(categoryId)
 
         const selectedCategory = await Category.findById(categoryId)    
         .populate({path:"courses",match:{status:"Published"},populate:([{path:"instructor"},{path:"ratingAndReviews"}])})
