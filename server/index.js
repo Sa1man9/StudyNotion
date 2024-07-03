@@ -23,8 +23,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(
     cors({
-        origin: ["https://study-notion-frontend-eight-khaki.vercel.app"],
-        methods: ["POST", "GET", "DELETE"],
+        origin: "https://study-notion-frontend-eight-khaki.vercel.app",
         credentials:true
     })
 )
